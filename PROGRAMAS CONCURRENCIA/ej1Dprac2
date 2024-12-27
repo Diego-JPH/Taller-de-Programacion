@@ -1,0 +1,96 @@
+programa ej1Dpractica2
+procesos
+  proceso recorrido
+  variables
+    contador:numero
+    identificacion:numero
+  comenzar
+    contador:=0
+    RecibirMensaje (identificacion,fiscalizador)
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        contador:=contador+1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      contador:=contador+1
+    EnviarMensaje (identificacion,fiscalizador)
+    EnviarMensaje (contador,fiscalizador)
+  fin
+  proceso arbitraje
+  variables
+    identificacion:numero
+    floresC1:numero
+    floresC2:numero
+    floresC3:numero
+    floresC4:numero
+    floresC5:numero
+    floresC6:numero
+  comenzar
+    EnviarMensaje (1,competidor1)
+    EnviarMensaje (2,competidor2)
+    EnviarMensaje (3,competidor3)
+    EnviarMensaje (4,competidor4)
+    EnviarMensaje (5,competidor5)
+    EnviarMensaje (6,competidor6)
+    RecibirMensaje(identificador,*)
+    repetir 6
+      si (identificador = 1)
+        RecibirMensaje(floresC1,competidor1)
+      sino
+        si (identificador = 2)
+          RecibirMensaje(floresC2,competidor2)
+        sino
+          si (identificador = 3)
+            RecibirMensaje(floresC3,competidor3)
+          sino
+            si (identificador = 4)
+              RecibirMensaje(floresC4,competidor4)
+            sino
+              si (identificador = 5)
+                RecibirMensaje(floresC5,competidor5)
+              sino
+                RecibirMensaje(floresC6,competidor6)
+    VERIFICACION DE CUAL ES MAYOR Y LO INFORMAAAAAAAAAAAAAAAAAAAAAA
+  fin
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(3,21,3,30)
+  area4:AreaP(4,31,4,40)
+  area5:AreaP(5,41,5,50)
+  area6:AreaP(6,51,6,60)
+  area7:AreaP(2,1,2,1)
+robots
+  robot tipo1
+  comenzar
+    recorrido
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  competidor1:tipo1
+  competidor2:tipo1
+  competidor3:tipo1
+  competidor4:tipo1
+  competidor5:tipo1
+  competidor6:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(competidor1,area1)
+  AsignarArea(competidor2,area2)
+  AsignarArea(fiscalizador,area7)
+  AsignarArea(competidor3,area3)
+  AsignarArea(competidor4,area4)
+  AsignarArea(competidor5,area5)
+  AsignarArea(competidor6,area6)
+  Iniciar(competidor1,1,1)
+  Iniciar(competidor2,2,11)
+  Iniciar(competidor3,3,21)
+  Iniciar(competidor4,4,31)
+  Iniciar(competidor5,5,41)
+  Iniciar(competidor6,6,51)
+  Iniciar(fiscalizador,2,1)
+fin

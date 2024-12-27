@@ -1,0 +1,114 @@
+programa PingoDiego
+procesos
+  proceso juntarFlores (ES contador:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+  fin
+  proceso perimetro
+  variables
+    identidad,continuar,ganador,AvActual,CaActual,contador:numero
+  comenzar
+    contador:=0
+    RecibirMensaje(identidad,coordinador)
+    repetir 4
+      repetir 5
+        juntarFlores (contador)
+        mover
+      derecha
+      EnviarMensaje(1,coordinador)
+      RecibirMensaje(continuar,coordinador)
+    EnviarMensaje(identidad,coordinador)
+    EnviarMensaje(contador,coordinador)
+    RecibirMensaje(ganador,coordinador)
+    si (ganador = 0)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      mientras (HayFlorEnLaBolsa)
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        depositarFlor
+        Pos(AvActual,CaActual)
+        LiberarEsquina(10,10)
+  fin
+  proceso arbitraje
+  variables
+    barrera,identidad,contador,maxFlores,ganador:numero
+  comenzar
+    maxFlores:=-1
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    repetir 4
+      repetir 3
+        RecibirMensaje(barrera,*)
+      EnviarMensaje(1,R1)
+      EnviarMensaje(1,R2)
+      EnviarMensaje(1,R3)
+    repetir 3
+      RecibirMensaje(identidad,*)
+      si (identidad = 1)
+        RecibirMensaje(contador,R1)
+        si (contador > maxFlores)
+          maxFlores:=contador
+          ganador:=1
+      sino
+        si (identidad = 2)
+          RecibirMensaje(contador,R2)
+          si (contador > maxFlores)
+            maxFlores:=contador
+            ganador:=2
+        sino
+          RecibirMensaje(contador,R3)
+          si (contador > maxFlores)
+            maxFlores:=contador
+            ganador:=3
+    si (ganador = 1)
+      EnviarMensaje(1,R1)
+      EnviarMensaje(0,R2)
+      EnviarMensaje(0,R3)
+    sino
+      si (ganador = 2)
+        EnviarMensaje(1,R2)
+        EnviarMensaje(0,R1)
+        EnviarMensaje(0,R3)
+      sino
+        EnviarMensaje(1,R3)
+        EnviarMensaje(0,R1)
+        EnviarMensaje(0,R2)
+    Informar('GANADOR',ganador)
+  fin
+areas
+  area1:AreaP(1,1,6,6)
+  area2:AreaP(7,1,12,6)
+  area3:AreaP(13,1,18,6)
+  area4:AreaP(20,1,20,1)
+  deposito:AreaPC(10,10,10,10)
+robots
+  robot tipo1
+  comenzar
+    perimetro
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  coordinador:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R2,area2)
+  AsignarArea(R3,area3)
+  AsignarArea(coordinador,area4)
+  AsignarArea(R1,deposito)
+  AsignarArea(R2,deposito)
+  AsignarArea(R3,deposito)
+  Iniciar(R1,1,1)
+  Iniciar(R2,7,1)
+  Iniciar(R3,13,1)
+  Iniciar(coordinador,20,1)
+fin

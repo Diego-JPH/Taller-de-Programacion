@@ -1,0 +1,130 @@
+programa ej1prac5
+procesos
+  proceso mientrasFlores (ES contador:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+  fin
+  proceso mientrasPapeles (ES contador:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      contador:=contador+1
+  fin
+  proceso juntarFlores
+  variables
+    AvActual,identidad,contador:numero
+  comenzar
+    contador:=0
+    RecibirMensaje(identidad,fiscalizador)
+    mientrasFlores (contador)
+    repetir 96
+      mover
+      mientrasFlores (contador)
+    AvActual:=PosAv
+    BloquearEsquina(AvActual,98)
+    mover
+    mientrasFlores (contador)
+    BloquearEsquina(AvActual,99)
+    mover
+    LiberarEsquina(AvActual,98)
+    mientrasFlores (contador)
+    mover
+    LiberarEsquina(AvActual,99)
+    mientrasFlores (contador)
+    EnviarMensaje(identidad,fiscalizador)
+    EnviarMensaje(contador,fiscalizador)
+  fin
+  proceso juntarPapeles
+  variables
+    contador,identidad,CaActual:numero
+  comenzar
+    contador:=0
+    derecha
+    RecibirMensaje(identidad,fiscalizador)
+    mientrasPapeles (contador)
+    CaActual:=PosCa
+    BloquearEsquina(2,CaActual)
+    mover
+    mientrasPapeles (contador)
+    BloquearEsquina(3,CaActual)
+    mover
+    LiberarEsquina(2,CaActual)
+    mientrasPapeles (contador)
+    mover
+    LiberarEsquina(3,CaActual)
+    repetir 96
+      mientrasPapeles (contador)
+      mover
+    mientrasPapeles (contador)
+    EnviarMensaje(identidad,fiscalizador)
+    EnviarMensaje(contador,fiscalizador)
+  fin
+  proceso arbitraje
+  variables
+    identidad,contador,contadorE1,contadorE2:numero
+  comenzar
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,A1)
+    EnviarMensaje(4,A2)
+    repetir 4
+      RecibirMensaje(identidad,*)
+      si (identidad = 1)
+        RecibirMensaje(contador,R1)
+        contadorE1:=contadorE1+contador
+      sino
+        si (identidad = 2)
+          RecibirMensaje(contador,R2)
+          contadorE1:=contadorE1+contador
+        sino
+          si (identidad = 3)
+            RecibirMensaje(contador,A1)
+            contadorE2:=contadorE2+contador
+          sino
+            RecibirMensaje(contador,A2)
+            contadorE2:=contadorE2+contador
+    si (contadorE1 > contadorE2)
+      Informar('GANADOR',1)
+    sino
+      si (contadorE1 < contadorE2)
+        Informar('GANADOR',2)
+      sino
+        Informar('EMPATE',0)
+  fin
+areas
+  rojo:AreaPC(2,1,3,100)
+  azul:AreaPC(1,98,100,99)
+  VAR:AreaP(1,100,1,100)
+robots
+  robot tipo1
+  comenzar
+    juntarFlores
+  fin
+  robot tipo2
+  comenzar
+    juntarPapeles
+  fin
+  robot tipo3
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  A1:tipo2
+  A2:tipo2
+  fiscalizador:tipo3
+comenzar
+  AsignarArea(R1,rojo)
+  AsignarArea(R2,rojo)
+  AsignarArea(A1,azul)
+  AsignarArea(A2,azul)
+  AsignarArea(fiscalizador,VAR)
+  Iniciar(R1,2,1)
+  Iniciar(R2,3,1)
+  Iniciar(A1,1,98)
+  Iniciar(A2,1,99)
+  Iniciar(fiscalizador,1,100)
+fin

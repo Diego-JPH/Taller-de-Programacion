@@ -1,0 +1,98 @@
+programa FINAL
+procesos
+  proceso jugador
+  variables
+    AvActual,CaActual,identidad,Av,Ca,contador,resultado:numero
+  comenzar
+    RecibirMensaje (identidad,fiscalizador)
+    AvActual:=PosAv
+    CaActual:=PosCa
+    repetir 5
+      contador:=0
+      RecibirMensaje(Av,fiscalizador)
+      RecibirMensaje(Ca,fiscalizador)
+      BloquearEsquina(Av,Ca)
+      Pos(Av,Ca)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        contador:=contador+1
+      Pos(AvActual,CaActual)
+      LiberarEsquina(Av,Ca)
+      EnviarMensaje(identidad,fiscalizador)
+      EnviarMensaje(contador,fiscalizador)
+    RecibirMensaje(resultado,fiscalizador)
+    si (resultado = 2)
+      Pos(25,25)
+      mientras (HayFlorEnLaBolsa)
+        depositarFlor
+  fin
+  proceso fiscalizacion
+  variables
+    contador1,contador2,Av,Ca,identidad,flores:numero
+  comenzar
+    contador1:=0
+    contador2:=0
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    repetir 5
+      Random(Av,1,20)
+      Random(Ca,1,20)
+      EnviarMensaje(Av,robot1)
+      EnviarMensaje(Ca,robot1)
+      Random(Av,1,20)
+      Random(Ca,1,20)
+      EnviarMensaje(Av,robot2)
+      EnviarMensaje(Ca,robot2)
+      repetir 2
+        RecibirMensaje(identidad,*)
+        si (identidad = 1)
+          RecibirMensaje(flores,robot1)
+          contador1:=contador1+flores
+        sino
+          RecibirMensaje(flores,robot2)
+          contador2:=contador2+flores
+    si (contador1 > contador2)
+      EnviarMensaje(1,robot1)
+      EnviarMensaje(2,robot2)
+      Informar('Ganador',1)
+    sino
+      si (contador2 > contador1)
+        EnviarMensaje(1,robot2)
+        EnviarMensaje(2,robot1)
+        Informar('Ganador',2)
+      sino
+        EnviarMensaje(1,robot1)
+        EnviarMensaje(1,robot2)
+        Informar('Empate',0)
+  fin
+areas
+  area1:AreaPC(1,1,20,20)
+  area2:AreaP(21,21,23,23)
+  area3:AreaP(25,25,25,25)
+robots
+  robot tipo1
+  comenzar
+    jugador
+  fin
+  robot tipo2
+  comenzar
+    fiscalizacion
+  fin
+variables
+  robot1:tipo1
+  robot2:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,area2)
+  AsignarArea(robot1,area3)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot2,area3)
+  AsignarArea(fiscalizador,area1)
+  AsignarArea(fiscalizador,area2)
+  AsignarArea(fiscalizador,area3)
+  Iniciar(robot1,21,21)
+  Iniciar(robot2,22,22)
+  Iniciar(fiscalizador,23,23)
+fin

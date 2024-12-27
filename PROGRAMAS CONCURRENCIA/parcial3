@@ -1,0 +1,164 @@
+programa parcial3
+procesos
+  proceso juntarObjetos (ES contadorF:numero;ES contadorP:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contadorF:=contadorF+1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      contadorP:=contadorP+1
+  fin
+  proceso rectangulo
+  variables
+    recorrido,contadorF,contadorP,AvActual,CaActual:numero
+  comenzar
+    contadorF:=0
+    contadorP:=0
+    RecibirMensaje(recorrido,coordinador)
+    si (recorrido = 1)
+      Pos(1,4)
+      derecha
+    sino
+      si (recorrido = 2)
+        Pos(1,8)
+        derecha
+      sino
+        si (recorrido = 3)
+          Pos(2,1)
+        sino
+          Pos(6,1)
+    repetir 4
+      AvActual:=PosAv
+      CaActual:=PosCa
+      juntarObjetos (contadorF,contadorP)
+      si (recorrido = 1) | (recorrido = 2)
+        BloquearEsquina(AvActual+1,CaActual)
+      sino
+        BloquearEsquina(AvActual,CaActual+1)
+      mover
+      juntarObjetos (contadorF,contadorP)
+      mover
+      si (recorrido = 1) | (recorrido = 2)
+        LiberarEsquina(AvActual+1,CaActual)
+      sino
+        LiberarEsquina(AvActual,CaActual+1)
+    derecha
+    repetir 2
+      juntarObjetos (contadorF,contadorP)
+      mover
+    derecha
+    repetir 4
+      AvActual:=PosAv
+      CaActual:=PosCa
+      juntarObjetos (contadorF,contadorP)
+      si (recorrido = 1) | (recorrido = 2)
+        BloquearEsquina(AvActual-1,CaActual)
+      sino
+        BloquearEsquina(AvActual,CaActual-1)
+      mover
+      juntarObjetos (contadorF,contadorP)
+      mover
+      si (recorrido = 1) | (recorrido = 2)
+        LiberarEsquina(AvActual-1,CaActual)
+      sino
+        LiberarEsquina(AvActual,CaActual-1)
+    derecha
+    repetir 2
+      juntarObjetos (contadorF,contadorP)
+      mover
+    derecha
+    EnviarMensaje(recorrido,coordinador)
+    EnviarMensaje(1,coordinador)
+    EnviarMensaje(contadorF,coordinador)
+    EnviarMensaje(recorrido,coordinador)
+    EnviarMensaje(2,coordinador)
+    EnviarMensaje(contadorP,coordinador)
+  fin
+  proceso arbitraje
+  variables
+    recorrido,objeto,flores,papeles,totalFlores,totalPapeles:numero
+  comenzar
+    totalFlores:=0
+    totalPapeles:=0
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    EnviarMensaje(4,R4)
+    repetir 8
+      RecibirMensaje(recorrido,*)
+      si (recorrido = 1)
+        RecibirMensaje(objeto,R1)
+        si (objeto = 1)
+          RecibirMensaje(flores,R1)
+          totalFlores:=totalFlores+flores
+        sino
+          RecibirMensaje(papeles,R1)
+          totalPapeles:=totalPapeles+papeles
+      sino
+        si (recorrido = 2)
+          RecibirMensaje(objeto,R2)
+          si (objeto = 1)
+            RecibirMensaje(flores,R2)
+            totalFlores:=totalFlores+flores
+          sino
+            RecibirMensaje(papeles,R2)
+            totalPapeles:=totalPapeles+papeles
+        sino
+          si (recorrido = 3)
+            RecibirMensaje(objeto,R3)
+            si (objeto = 1)
+              RecibirMensaje(flores,R3)
+              totalFlores:=totalFlores+flores
+            sino
+              RecibirMensaje(papeles,R3)
+              totalPapeles:=totalPapeles+papeles
+          sino
+            RecibirMensaje(objeto,R4)
+            si (objeto = 1)
+              RecibirMensaje(flores,R4)
+              totalFlores:=totalFlores+flores
+            sino
+              RecibirMensaje(papeles,R4)
+              totalPapeles:=totalPapeles+papeles
+    Informar('FLORES',totalFlores)
+    Informar('PAPELES',totalPapeles)
+  fin
+areas
+  area1:AreaPC(1,2,9,4)
+  area2:AreaPC(1,6,9,8)
+  area3:AreaPC(2,1,4,9)
+  area4:AreaPC(6,1,8,9)
+  inicio:AreaC(20,1,20,5)
+  VAR:AreaP(20,15,20,15)
+robots
+  robot tipo1
+  comenzar
+    rectangulo
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  R4:tipo1
+  coordinador:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R1,inicio)
+  AsignarArea(R2,area2)
+  AsignarArea(R2,inicio)
+  AsignarArea(R3,area3)
+  AsignarArea(R3,inicio)
+  AsignarArea(R4,area4)
+  AsignarArea(R4,inicio)
+  AsignarArea(coordinador,VAR)
+  Iniciar(R1,20,1)
+  Iniciar(R2,20,2)
+  Iniciar(R3,20,3)
+  Iniciar(R4,20,4)
+  Iniciar(coordinador,20,15)
+fin

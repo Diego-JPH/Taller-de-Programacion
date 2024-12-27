@@ -1,0 +1,80 @@
+programa ej1prac3
+procesos
+  proceso recolectorF
+  variables
+    Av,Ca:numero
+    AvActual,CaActual:numero
+  comenzar
+    repetir 5
+      AvActual:=PosAv
+      CaActual:=PosCa
+      Random(Av,1,5)
+      Random(Ca,1,10)
+      BloquearEsquina(Av,Ca)
+      Pos(Av,Ca)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      Pos(AvActual,CaActual)
+      LiberarEsquina(Av,Ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Pos(AvActual,CaActual)
+    LiberarEsquina(10,10)
+  fin
+  proceso recolectorP
+  variables
+    Av,Ca:numero
+    AvActual,CaActual:numero
+  comenzar
+    repetir 3
+      AvActual:=PosAv
+      CaActual:=PosCa
+      Random(Av,6,10)
+      Random(Ca,1,9)
+      BloquearEsquina(Av,Ca)
+      Pos(Av,Ca)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      Pos(AvActual,CaActual)
+      LiberarEsquina(Av,Ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+    Pos(AvActual,CaActual)
+    LiberarEsquina(10,10)
+  fin
+areas
+  areaFloreros:AreaPC(1,1,5,10)
+  areaPapeleros:AreaPC(6,1,10,9)
+  areaInicial:AreaP(6,10,10,10)
+robots
+  robot tipo1
+  comenzar
+    recolectorF
+  fin
+  robot tipo2
+  comenzar
+    recolectorP
+  fin
+variables
+  F1:tipo1
+  F2:tipo1
+  P1:tipo2
+  P2:tipo2
+comenzar
+  AsignarArea(F1,areaFloreros)
+  AsignarArea(F1,areaInicial)
+  AsignarArea(F2,areaFloreros)
+  AsignarArea(F2,areaInicial)
+  AsignarArea(P1,areaPapeleros)
+  AsignarArea(P1,areaInicial)
+  AsignarArea(P2,areaPapeleros)
+  AsignarArea(P2,areaInicial)
+  Iniciar(F1,6,10)
+  Iniciar(F2,7,10)
+  Iniciar(P1,8,10)
+  Iniciar(P2,9,10)
+fin

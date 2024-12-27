@@ -1,0 +1,139 @@
+programa ej6prac3
+procesos
+  proceso cuadrante
+  variables
+    identidad,irCa,alto,ancho,tipo:numero
+  comenzar
+    RecibirMensaje(tipo,fiscalizador)
+    RecibirMensaje(alto,fiscalizador)
+    RecibirMensaje(ancho,fiscalizador)
+    RecibirMensaje(identidad,fiscalizador)
+    repetir 2
+      repetir (alto-1)
+        si (tipo = 1)
+          mientras (HayFlorEnLaEsquina)
+            tomarFlor
+          mover
+        sino
+          si (tipo = 2)
+            mientras (HayPapelEnLaEsquina)
+              tomarPapel
+            mover
+          sino
+            mientras (HayFlorEnLaEsquina)
+              tomarFlor
+            mientras (HayPapelEnLaEsquina)
+              tomarPapel
+            si (PosAv = 5) & (PosCa = 6)
+              BloquearEsquina(5,7)
+            mover
+            si (PosAv = 5) & (PosCa = 8)
+              LiberarEsquina(5,7)
+      derecha
+      repetir (ancho-1)
+        si (tipo = 1)
+          mientras (HayFlorEnLaEsquina)
+            tomarFlor
+          si (PosAv = 4) & (PosCa = 7)
+            BloquearEsquina(5,7)
+          mover
+          si (PosAv = 6) & (PosCa = 7)
+            LiberarEsquina(5,7)
+        sino
+          si (tipo = 2)
+            mientras (HayPapelEnLaEsquina)
+              tomarPapel
+            mover
+          sino
+            mientras (HayFlorEnLaEsquina)
+              tomarFlor
+            mientras (HayPapelEnLaEsquina)
+              tomarPapel
+            mover
+      derecha
+    EnviarMensaje(identidad,fiscalizador)
+    RecibirMensaje(irCa,fiscalizador)
+    Pos(1,irCa)
+    derecha
+    si (tipo = 1)
+      mientras (HayFlorEnLaBolsa) & (PosAv < 100)
+        depositarFlor
+        mover
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+    sino
+      si (tipo = 2)
+        mientras ((HayFlorEnLaBolsa) & (HayPapelEnLaBolsa)) & (PosAv < 100)
+          depositarFlor
+          depositarPapel
+          mover
+        si ((HayFlorEnLaBolsa) & (HayPapelEnLaBolsa))
+          depositarFlor
+          depositarPapel
+      sino
+        mientras (HayPapelEnLaBolsa) & (PosAv < 100)
+          depositarPapel
+          mover
+        si (HayPapelEnLaBolsa)
+          depositarPapel
+  fin
+  proceso arbitraje
+  variables
+    identidad,destino:numero
+  comenzar
+    destino:=20
+    EnviarMensaje(1,R1)
+    EnviarMensaje(3,R2)
+    EnviarMensaje(2,R3)
+    EnviarMensaje(6,R1)
+    EnviarMensaje(6,R1)
+    EnviarMensaje(10,R2)
+    EnviarMensaje(10,R2)
+    EnviarMensaje(7,R3)
+    EnviarMensaje(7,R3)
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    repetir 3
+      RecibirMensaje(identidad,*)
+      si (identidad = 1)
+        EnviarMensaje(destino,R1)
+      sino
+        si (identidad = 2)
+          EnviarMensaje(destino,R2)
+        sino
+          si (identidad = 3)
+            EnviarMensaje(destino,R3)
+      destino:=destino+1
+  fin
+areas
+  area1:AreaPC(2,2,15,15)
+  area2:AreaPC(1,20,100,22)
+  VAR:AreaP(1,1,1,1)
+robots
+  robot tipo1
+  comenzar
+    cuadrante
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R2,area1)
+  AsignarArea(R3,area1)
+  AsignarArea(R1,area2)
+  AsignarArea(R2,area2)
+  AsignarArea(R3,area2)
+  AsignarArea(fiscalizador,VAR)
+  Iniciar(R1,2,2)
+  Iniciar(R2,5,5)
+  Iniciar(R3,9,9)
+  Iniciar(fiscalizador,1,1)
+fin

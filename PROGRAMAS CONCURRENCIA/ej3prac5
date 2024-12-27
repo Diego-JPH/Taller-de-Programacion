@@ -1,0 +1,97 @@
+programa ej3prac5
+procesos
+  proceso depositarFlores
+  comenzar
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso juntarFlores (ES contador:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+  fin
+  proceso recorrido
+  variables
+    contador,esquina,AvActual,CaActual:numero
+  comenzar
+    contador:=0
+    esquina:=0
+    derecha
+    repetir 99
+      juntarFlores (contador)
+      esquina:=esquina+1
+      si ((esquina = 5) | (contador >= 10))
+        AvActual:=PosAv
+        CaActual:=PosCa
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        depositarFlores
+        Pos(AvActual,CaActual)
+        LiberarEsquina(10,10)
+        EnviarMensaje(1,cosechador)
+        esquina:=0
+        contador:=0   
+      mover
+    juntarFlores (contador)
+    esquina:=esquina+1
+    si ((esquina = 5) | (contador >= 10))
+      AvActual:=PosAv
+      CaActual:=PosCa
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlores
+      Pos(AvActual,CaActual)
+      LiberarEsquina(10,10)
+      EnviarMensaje(1,cosechador)
+      esquina:=0
+      contador:=0
+    EnviarMensaje(2,cosechador)
+  fin
+  proceso cosechar
+  variables
+    robotsFinalizados,accion,contador:numero
+  comenzar
+    contador:=0
+    robotsFinalizados:=0
+    mientras (robotsFinalizados <> 2)
+      RecibirMensaje(accion,*)
+      si (accion = 1)
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        juntarFlores (contador)
+        Pos(1,5)
+        LiberarEsquina(10,10)
+      sino
+        robotsFinalizados:=robotsFinalizados+1
+    Informar('FLORES',contador)
+  fin
+areas
+  area1:AreaP(1,3,100,3)
+  area2:AreaP(1,4,100,4)
+  VAR:AreaP(1,5,1,5)
+  deposito:AreaPC(10,10,10,10)
+robots
+  robot tipo1
+  comenzar
+    recorrido
+  fin
+  robot tipo2
+  comenzar
+    cosechar
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  cosechador:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R2,area2)
+  AsignarArea(cosechador,VAR)
+  AsignarArea(R1,deposito)
+  AsignarArea(R2,deposito)
+  AsignarArea(cosechador,deposito)
+  Iniciar(R1,1,3)
+  Iniciar(R2,1,4)
+  Iniciar(cosechador,1,5)
+fin

@@ -1,0 +1,106 @@
+programa ej2prac3
+procesos
+  proceso escalones (E recorrido:numero; E escalon:numero)
+  variables
+    identidad:numero
+  comenzar
+    si (recorrido = 1)
+      RecibirMensaje(identidad,jefe)
+    repetir 4
+      repetir escalon
+        mover
+      si (identidad = 1)
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+        derecha
+      sino
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+        repetir 3
+          derecha
+      repetir escalon
+        mover
+      si (identidad = 1)
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+        repetir 3
+          derecha
+      sino
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+        derecha
+      si (recorrido = 1)
+        escalon:=escalon-1
+      sino
+        escalon:=escalon+1
+    si (identidad = 1) & (recorrido = 1)
+      mover
+      derecha
+      BloquearEsquina(16,15)
+      mover
+      EnviarMensaje(identidad,jefe)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      repetir 2
+        derecha
+      mover
+      LiberarEsquina(16,15)
+    sino
+      si (identidad = 2) & (recorrido = 1)
+        mover
+        repetir 3
+          derecha
+        BloquearEsquina(16,15)
+        mover
+        EnviarMensaje(identidad,jefe)
+        mientras(HayFlorEnLaEsquina)
+          tomarFlor
+        repetir 2
+          derecha
+        mover
+        LiberarEsquina(16,15)
+    si (recorrido = 2)
+      EnviarMensaje(identidad,jefe)
+  fin
+  proceso arbitraje
+  variables
+    puesto1medio,puesto2medio,puesto1,puesto2:numero
+  comenzar
+    EnviarMensaje(2,R2)
+    EnviarMensaje(1,R1)
+    RecibirMensaje(puesto1medio,*)
+    RecibirMensaje(puesto2medio,*)
+    RecibirMensaje(puesto1,*)
+    RecibirMensaje(puesto2,*)
+    Informar('Ganador',puesto1medio)
+  fin
+areas
+  area1:AreaC(1,1,31,30)
+robots
+  robot tipo1
+  comenzar
+    escalones(1,5)
+    escalones(2,2)
+  fin
+  robot tipo2
+  comenzar
+    escalones(1,5)
+    escalones(2,2)
+  fin
+  robot tipo3
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo2
+  jefe:tipo3
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R2,area1)
+  AsignarArea(jefe,area1)
+  Iniciar(R1,1,1)
+  Iniciar(R2,31,1)
+  Iniciar(jefe,15,1)
+fin
+ 

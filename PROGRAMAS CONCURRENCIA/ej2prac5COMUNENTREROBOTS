@@ -1,0 +1,108 @@
+programa ej2prac5
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso recorrido
+  variables
+    AvActual,CaActual,continuar,identidad:numero
+  comenzar
+    RecibirMensaje(identidad,fiscalizador)
+    derecha
+    repetir 9
+      juntarFlores
+      repetir 9
+        mover
+        juntarFlores
+      AvActual:=PosAv
+      CaActual:=PosCa
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlores
+      Pos(AvActual,CaActual)
+      LiberarEsquina(50,50)
+      si (identidad = 1)
+        EnviarMensaje(1,R2)
+        EnviarMensaje(1,R3)
+        RecibirMensaje(continuar,R2)
+        RecibirMensaje(continuar,R3)
+      sino
+        si (identidad = 2)
+          EnviarMensaje(1,R1)
+          EnviarMensaje(1,R3)
+          RecibirMensaje(continuar,R1)
+          RecibirMensaje(continuar,R3)
+        sino
+          EnviarMensaje(1,R1)
+          EnviarMensaje(1,R2)
+          RecibirMensaje(continuar,R1)
+          RecibirMensaje(continuar,R2)
+      mover
+    repetir 9
+      juntarFlores
+      mover
+    juntarFlores
+    AvActual:=PosAv
+    CaActual:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    depositarFlores
+    Pos(AvActual,CaActual)
+    LiberarEsquina(50,50)
+    EnviarMensaje(1,fiscalizador)
+  fin
+  proceso arbitraje
+  variables
+    contador,finalizaron:numero
+  comenzar
+    contador:=0
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    repetir 3
+      RecibirMensaje(finalizaron,*)
+    Pos(50,50)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+    Informar(contador)
+  fin
+areas
+  recorridos:AreaPC(1,1,100,3)
+  VAR:AreaP(1,4,1,4)
+  deposito:AreaPC(50,50,50,50)
+robots
+  robot tipo1
+  comenzar
+    recorrido
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(R1,recorridos)
+  AsignarArea(R2,recorridos)
+  AsignarArea(R3,recorridos)
+  AsignarArea(R1,deposito)
+  AsignarArea(R2,deposito)
+  AsignarArea(R3,deposito)
+  AsignarArea(fiscalizador,VAR)
+  AsignarArea(fiscalizador,deposito)
+  Iniciar(R1,1,1)
+  Iniciar(R2,1,2)
+  Iniciar(R3,1,3)
+  Iniciar(fiscalizador,1,4)
+fin

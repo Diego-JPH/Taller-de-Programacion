@@ -1,0 +1,90 @@
+programa ej3prac2
+procesos
+  proceso recorrido1
+  variables
+    cantP:numero
+    equipo:numero
+  comenzar
+    cantP:=0
+    RecibirMensaje(equipo,arbitro)
+    derecha
+    repetir 9
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        cantP:=cantP+1
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      cantP:=cantP+1
+    EnviarMensaje(equipo,arbitro)
+    EnviarMensaje(cantP,arbitro)
+  fin
+  proceso recorrido2
+  variables
+    cantP:numero
+    cantF:numero
+  comenzar
+    cantF:=0
+    derecha
+    RecibirMensaje(cantP,arbitro)
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        cantF:=cantF+1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cantF:=cantF+1
+    Informar ('TOTAL',(cantP+cantF))
+  fin
+  proceso arbitraje
+  variables
+    cantP:numero
+    equipo:numero
+  comenzar
+    EnviarMensaje(1,A1)
+    EnviarMensaje(2,B1)
+    repetir 2
+      RecibirMensaje(equipo,*)
+      si (equipo = 1)
+        RecibirMensaje(cantP,A1)
+        EnviarMensaje(cantP,A2)
+      sino
+        RecibirMensaje(cantP,B1)
+        EnviarMensaje(cantP,B2)
+  fin
+areas
+  area1:AreaPC(1,1,20,1)
+  area2:AreaPC(1,5,20,5)
+  area3:AreaP(1,3,1,3)
+robots
+  robot tipo1
+  comenzar
+    recorrido1
+  fin
+  robot tipo2
+  comenzar
+    recorrido2
+  fin
+  robot tipo3
+  comenzar
+    arbitraje
+  fin
+variables
+  A1:tipo1
+  A2:tipo2
+  B1:tipo1
+  B2:tipo2
+  arbitro:tipo3
+comenzar
+  AsignarArea(A1,area1)
+  AsignarArea(A2,area1)
+  AsignarArea(B1,area2)
+  AsignarArea(B2,area2)
+  AsignarArea(arbitro,area3)
+  Iniciar(A1,1,1)
+  Iniciar(A2,11,1)
+  Iniciar(B1,1,5)
+  Iniciar(B2,11,5)
+  Iniciar(arbitro,1,3)
+fin

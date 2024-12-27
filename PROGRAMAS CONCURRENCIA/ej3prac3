@@ -1,0 +1,102 @@
+programa ej3prac3
+procesos
+  proceso juntarF
+  variables
+    AvActual,CaActual,Av,Ca,identidad,contF,continuar:numero
+  comenzar
+    continuar:=1
+    contF:=0
+    AvActual:=PosAv
+    CaActual:=PosCa
+    RecibirMensaje(identidad,jefe)
+    RecibirMensaje(Av,jefe)
+    RecibirMensaje(Ca,jefe)
+    mientras (continuar = 1)
+      BloquearEsquina(Av,Ca)
+      Pos(Av,Ca)
+      si (HayFlorEnLaEsquina)
+        tomarFlor
+      sino
+        continuar:=0
+      Pos(AvActual,CaActual)
+      LiberarEsquina(Av,Ca)
+      contF:=contF+1
+    EnviarMensaje(identidad,jefe)
+    EnviarMensaje(contF,jefe)
+  fin
+  proceso arbitraje
+  variables
+    Av,Ca,identidad,cantF1,cantF2,cantF3,cantF4:numero
+  comenzar
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    EnviarMensaje(4,R4)
+    Random(Av,2,10)
+    Random(Ca,2,10)
+    EnviarMensaje(Av,R1)
+    EnviarMensaje(Ca,R1)
+    EnviarMensaje(Av,R2)
+    EnviarMensaje(Ca,R2)
+    EnviarMensaje(Av,R3)
+    EnviarMensaje(Ca,R3)
+    EnviarMensaje(Av,R4)
+    EnviarMensaje(Ca,R4)
+    repetir 4
+      RecibirMensaje(identidad,*)
+      si (identidad = 1)
+        RecibirMensaje(cantF1,R1)
+      sino
+        si (identidad = 2)
+          RecibirMensaje(cantF2,R2)
+        sino
+          si (identidad = 3)
+            RecibirMensaje(cantF3,R3)
+          sino
+            RecibirMensaje(cantF4,R4)
+    si (cantF1 > cantF2) & (cantF1 > cantF3) & (cantF1 > cantF4)
+      Informar('Ganador',1)
+    sino
+      si (cantF2 > cantF1) & (cantF2 > cantF3) & (cantF2 > cantF4)
+        Informar('Ganador',2)
+      sino
+        si (cantF3 > cantF1) & (cantF3 > cantF2) & (cantF3 > cantF4)
+          Informar('Ganador',3)
+        sino
+          Informar('Ganador',4)
+  fin
+areas
+  area1:AreaPC(2,2,10,10)
+  area2:AreaP(1,1,1,1)
+  area3:AreaC(2,1,5,1)
+robots
+  robot tipo1
+  comenzar
+    juntarF
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  R4:tipo1
+  jefe:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R1,area3)
+  AsignarArea(R2,area1)
+  AsignarArea(R2,area3)
+  AsignarArea(R3,area1)
+  AsignarArea(R3,area3)
+  AsignarArea(R4,area1)
+  AsignarArea(R4,area3)
+  AsignarArea(jefe,area2)
+  Iniciar(R1,2,1)
+  Iniciar(R2,3,1)
+  Iniciar(R3,4,1)
+  Iniciar(R4,5,1)
+  Iniciar(jefe,1,1)
+fin

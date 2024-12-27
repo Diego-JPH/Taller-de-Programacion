@@ -1,0 +1,110 @@
+programa ej5prac3
+procesos
+  proceso busqueda
+  variables
+    contador,continuar,AvActual,CaActual,identidad:numero
+  comenzar
+    contador:=1
+    continuar:=1
+    RecibirMensaje(identidad,coordinador)
+    mientras (contador < 100) & (continuar = 1)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si (HayPapelEnLaEsquina)
+        tomarPapel
+      Pos(AvActual,CaActual)
+      LiberarEsquina(11,11)
+      si (HayPapelEnLaBolsa)
+        depositarPapel
+        contador:=contador+1
+        mover
+      sino
+        EnviarMensaje(identidad,coordinador)
+        EnviarMensaje(contador,coordinador)
+        continuar:=0
+    si (continuar = 1)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si (HayPapelEnLaEsquina)
+        tomarPapel
+      Pos(AvActual,CaActual)
+      LiberarEsquina(11,11)
+      si (HayPapelEnLaBolsa)
+        depositarPapel
+        contador:=contador+1
+        EnviarMensaje(identidad,coordinador)
+        EnviarMensaje(contador,coordinador)
+  fin
+  proceso arbitraje
+  variables
+    identidad,distancia1,distancia2,distancia3,distancia4:numero
+  comenzar
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    EnviarMensaje(4,R4)
+    repetir 4
+      RecibirMensaje(identidad,*)
+      si (identidad = 1)
+        RecibirMensaje(distancia1,R1)
+      sino
+        si (identidad = 2)
+          RecibirMensaje(distancia2,R2)
+        sino
+          si (identidad = 3)
+            RecibirMensaje(distancia3,R3)
+          sino
+            RecibirMensaje(distancia4,R4)
+    si (distancia1>distancia2) & (distancia1>distancia3) & (distancia1>distancia4)
+      Informar('GANADOR',1)
+    sino
+      si (distancia2>distancia1) & (distancia2>distancia3) & (distancia2>distancia4)
+        Informar('GANADOR',2)
+      sino
+        si(distancia3>distancia1)&(distancia3>distancia2)&(distancia3>distancia4)
+          Informar('GANADOR',3)
+        sino
+          Informar('GANADOR',4)
+  fin
+areas
+  area1:AreaP(4,1,4,100)
+  area2:AreaP(6,1,6,100)
+  area3:AreaP(8,1,8,100)
+  area4:AreaP(10,1,10,100)
+  fuente:AreaPC(11,11,11,11)
+  VAR:AreaP(1,1,1,1)
+robots
+  robot tipo1
+  comenzar
+    busqueda
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  R4:tipo1
+  coordinador:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R1,fuente)
+  AsignarArea(R2,area2)
+  AsignarArea(R2,fuente)
+  AsignarArea(R3,area3)
+  AsignarArea(R3,fuente)
+  AsignarArea(R4,area4)
+  AsignarArea(R4,fuente)
+  AsignarArea(coordinador,VAR)
+  Iniciar(R1,4,1)
+  Iniciar(R2,6,1)
+  Iniciar(R3,8,1)
+  Iniciar(R4,10,1)
+  Iniciar(coordinador,1,1)
+fin

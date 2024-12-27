@@ -1,0 +1,95 @@
+programa ej2prac5
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso recorrido
+  variables
+    AvActual,CaActual,continuar:numero
+  comenzar
+    derecha
+    repetir 9
+      juntarFlores
+      repetir 9
+        mover
+        juntarFlores
+      AvActual:=PosAv
+      CaActual:=PosCa
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlores
+      Pos(AvActual,CaActual)
+      LiberarEsquina(50,50)
+      EnviarMensaje(1,fiscalizador)
+      RecibirMensaje(continuar,fiscalizador)
+      mover
+    repetir 9
+      juntarFlores
+      mover
+    juntarFlores
+    AvActual:=PosAv
+    CaActual:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    depositarFlores
+    Pos(AvActual,CaActual)
+    LiberarEsquina(50,50)
+    EnviarMensaje(1,fiscalizador)
+    RecibirMensaje(continuar,fiscalizador)
+  fin
+  proceso arbitraje
+  variables
+    contador,barrera,continuar:numero
+  comenzar
+    contador:=0
+    repetir 10
+      repetir 3
+        RecibirMensaje(barrera,*)
+      EnviarMensaje(continuar,R1)
+      EnviarMensaje(continuar,R2)
+      EnviarMensaje(continuar,R3)
+    Pos(50,50)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+    Informar(contador)
+  fin
+areas
+  recorridos:AreaPC(1,1,100,3)
+  VAR:AreaP(1,4,1,4)
+  deposito:AreaPC(50,50,50,50)
+robots
+  robot tipo1
+  comenzar
+    recorrido
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(R1,recorridos)
+  AsignarArea(R2,recorridos)
+  AsignarArea(R3,recorridos)
+  AsignarArea(R1,deposito)
+  AsignarArea(R2,deposito)
+  AsignarArea(R3,deposito)
+  AsignarArea(fiscalizador,VAR)
+  AsignarArea(fiscalizador,deposito)
+  Iniciar(R1,1,1)
+  Iniciar(R2,1,2)
+  Iniciar(R3,1,3)
+  Iniciar(fiscalizador,1,4)
+fin

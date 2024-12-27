@@ -1,0 +1,107 @@
+programa ej4prac5
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso floreros
+  variables
+    continuar:boolean
+    Av,Ca,AvActual,CaActual:numero
+  comenzar
+    RecibirMensaje(continuar,fiscalizador)
+    mientras (continuar = V)
+      RecibirMensaje(Av,fiscalizador)
+      RecibirMensaje(Ca,fiscalizador)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      BloquearEsquina(Av,Ca)
+      Pos(Av,Ca)
+      juntarFlores
+      Pos(AvActual,CaActual)
+      LiberarEsquina(Av,Ca)
+      RecibirMensaje(continuar,fiscalizador)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    depositarFlores
+    Pos(AvActual,CaActual)
+    LiberarEsquina(10,10)
+    EnviarMensaje(1,fiscalizador)
+  fin
+  proceso fiscalizacion
+  variables
+    Av,Ca,florero,continuar,contador:numero
+  comenzar
+    contador:=0
+    repetir 50
+      Random(Av,40,60)
+      Random(Ca,40,60)
+      Random(florero,1,3)
+      si (florero = 1)
+        EnviarMensaje(V,R1)
+        EnviarMensaje(Av,R1)
+        EnviarMensaje(Ca,R1)
+      sino
+        si (florero = 2)
+          EnviarMensaje(V,R2)
+          EnviarMensaje(Av,R2)
+          EnviarMensaje(Ca,R2)
+        sino
+          EnviarMensaje(V,R3)
+          EnviarMensaje(Av,R3)
+          EnviarMensaje(Ca,R3)
+    EnviarMensaje(F,R1)
+    EnviarMensaje(F,R2)
+    EnviarMensaje(F,R3)
+    repetir 3
+      RecibirMensaje(continuar,*)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+    Pos(1,4)
+    LiberarEsquina(10,10)
+    Informar('FLORES',contador)
+  fin
+areas
+  inicio:AreaC(1,1,1,4)
+  jardin:AreaPC(40,40,60,60)
+  deposito:AreaPC(10,10,10,10)
+robots
+  robot tipo1
+  comenzar
+    floreros
+  fin
+  robot tipo2
+  comenzar
+    fiscalizacion
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(R1,inicio)
+  AsignarArea(R2,inicio)
+  AsignarArea(R3,inicio)
+  AsignarArea(fiscalizador,inicio)
+  AsignarArea(R1,jardin)
+  AsignarArea(R2,jardin)
+  AsignarArea(R3,jardin)
+  AsignarArea(R1,deposito)
+  AsignarArea(R2,deposito)
+  AsignarArea(R3,deposito)
+  AsignarArea(fiscalizador,deposito)
+  Iniciar(R1,1,1)
+  Iniciar(R2,1,2)
+  Iniciar(R3,1,3)
+  Iniciar(fiscalizador,1,4)
+fin

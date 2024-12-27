@@ -1,0 +1,34 @@
+programa ejercicio1
+areas 
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    contadorF: numero
+    contadorV: numero
+  comenzar
+    repetir 3
+      si ~(HayFlorEnLaEsquina)
+        contadorV:= contadorV+1
+      sino
+        mientras (HayFlorEnLaEsquina)
+          tomarFLor
+          contadorF:= contadorF+1
+      repetir 99
+        si ~(HayFlorEnLaEsquina)
+          contadorV:= contadorV+1
+        sino
+          mientras (HayFlorEnLaEsquina)
+            tomarFlor
+            contadorF:= contadorF+1
+        mover
+      Pos (PosAv+2,1)
+    Informar (contadorF)
+    Informar (contadorV)
+  fin
+variables
+  buscador: robot1 
+comenzar
+  AsignarArea (buscador,ciudad)
+  Iniciar (buscador,1,1)
+fin    

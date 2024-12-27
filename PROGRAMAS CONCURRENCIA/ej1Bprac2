@@ -1,0 +1,63 @@
+programa ej1Bpractica2
+procesos
+  proceso recorrido
+  variables
+    contador:numero
+    identificacion:numero
+  comenzar
+    contador:=0
+    RecibirMensaje (identificacion,fiscalizador)
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        contador:=contador+1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      contador:=contador+1
+    EnviarMensaje (identificacion,fiscalizador)
+    EnviarMensaje (contador,fiscalizador)
+  fin
+  proceso arbitraje
+  variables
+    identificacion:numero
+    floresC1:numero
+    floresC2:numero
+  comenzar
+    EnviarMensaje (1,competidor1)
+    EnviarMensaje (2,competidor2)
+    repetir 2
+      RecibirMensaje (identificacion,*)
+      si (identificacion = 1)
+        RecibirMensaje (floresC1,competidor1)
+      sino
+        RecibirMensaje (floresC2,competidor2)
+    si (floresC1 > floresC2)
+      Informar('GANADORC1',(floresC1-floresC2))
+    sino
+      Informar ('GANADORC2',(floresC2-floresC1))
+  fin
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(2,1,2,1)
+robots
+  robot tipo1
+  comenzar
+    recorrido
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  competidor1:tipo1
+  competidor2:tipo1
+  fiscalizador:tipo2
+comenzar
+  AsignarArea(competidor1,area1)
+  AsignarArea(competidor2,area2)
+  AsignarArea(fiscalizador,area3)
+  Iniciar(competidor1,1,1)
+  Iniciar(competidor2,2,11)
+  Iniciar(fiscalizador,2,1)
+fin

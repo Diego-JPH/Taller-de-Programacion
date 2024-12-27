@@ -1,0 +1,155 @@
+programa parcial1
+procesos
+  proceso laterales
+  variables
+    equipo,continua,AvActual,CaActual:numero
+  comenzar
+    continua:=1
+    si (PosAv = 31)
+      equipo:=2
+      repetir 3
+        derecha
+    sino
+      derecha
+      equipo:=1
+    mover
+    repetir 9
+      AvActual:=PosAv
+      CaActual:=PosCa
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      BloquearEsquina(AvActual,20)
+      Pos(AvActual,20)
+      mientras (HayFlorEnLaBolsa)
+        depositarFlor
+      Pos(AvActual,CaActual)
+      LiberarEsquina(AvActual,20)
+      si (equipo = 1)
+        EnviarMensaje(continua,A3)
+      sino
+        EnviarMensaje(continua,V3)
+      mover
+    AvActual:=PosAv
+    CaActual:=PosCa
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    BloquearEsquina(AvActual,20)
+    Pos(AvActual,20)
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Pos(AvActual,CaActual)
+    LiberarEsquina(AvActual,20)
+    si (equipo = 1)
+      EnviarMensaje(continua,A3)
+    sino
+      EnviarMensaje(continua,V3)
+  fin
+  proceso centrales
+  variables
+    contador,continua,equipo,AvActual:numero
+  comenzar
+    contador:=0
+    si (PosAv = 31)
+      equipo:=2
+      repetir 3
+        derecha
+    sino
+      derecha
+      equipo:=1
+    repetir 10
+      repetir 2
+        RecibirMensaje(continua,*)
+      mover
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        contador:=contador+1
+    BloquearEsquina(20,20)
+    AvActual:=PosAv
+    mover
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+    Pos((AvActual),(PosCa))
+    LiberarEsquina(20,20)
+    EnviarMensaje(equipo,fiscalizador)
+    EnviarMensaje(contador,fiscalizador)
+  fin
+  proceso arbitraje
+  variables
+    equipo,contador,maxFlores,ganador,ganadorCantFlores:numero
+  comenzar
+    maxFlores:=0
+    RecibirMensaje(equipo,*)
+    si (equipo = 1)
+      ganador:=1
+      RecibirMensaje(contador,A3)
+      si (contador > maxFlores)
+        maxFlores:=contador
+        ganadorCantFlores:=1
+    sino
+      ganador:=2
+      RecibirMensaje(contador,V3)
+      si (contador > maxFlores)
+        maxFlores:=contador
+        ganadorCantFlores:=2
+    RecibirMensaje(equipo,*)
+    si (equipo = 1)
+      RecibirMensaje(contador,A3)
+      si (contador > maxFlores)
+        maxFlores:=contador
+        ganadorCantFlores:=1
+    sino
+      RecibirMensaje(contador,V3)
+      si (contador > maxFlores)
+        maxFlores:=contador
+        ganadorCantFlores:=2
+    Informar('LLEGOPRIMERO',ganador)
+    Informar('JUNTOMASFLORES',ganadorCantFlores)
+  fin
+areas
+  areaInicioAzul:AreaPC(9,19,9,21)
+  areaInicioVerde:AreaPC(31,19,31,21)
+  areaFlores:AreaPC(10,19,30,21)
+  areaVAR:AreaP(20,18,20,18)
+robots
+  robot tipo1
+  comenzar
+    laterales
+  fin
+  robot tipo2
+  comenzar
+    centrales
+  fin
+  robot tipo3
+  comenzar
+    arbitraje
+  fin
+variables
+  A1:tipo1
+  A2:tipo1
+  A3:tipo2
+  V1:tipo1
+  V2:tipo1
+  V3:tipo2
+  fiscalizador:tipo3
+comenzar
+  AsignarArea(A1,areaInicioAzul)
+  AsignarArea(A2,areaInicioAzul)
+  AsignarArea(A3,areaInicioAzul)
+  AsignarArea(V1,areaInicioVerde)
+  AsignarArea(V2,areaInicioVerde)
+  AsignarArea(V3,areaInicioVerde)
+  AsignarArea(A1,areaFlores)
+  AsignarArea(A2,areaFlores)
+  AsignarArea(A3,areaFlores)
+  AsignarArea(V1,areaFlores)
+  AsignarArea(V2,areaFlores)
+  AsignarArea(V3,areaFlores)
+  AsignarArea(fiscalizador,areaVAR)
+  Iniciar(A1,9,19)
+  Iniciar(A2,9,21)
+  Iniciar(A3,9,20)
+  Iniciar(V1,31,19)
+  Iniciar(V2,31,21)
+  Iniciar(V3,31,20)
+  Iniciar(fiscalizador,20,18)
+fin

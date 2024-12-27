@@ -1,0 +1,184 @@
+programa parcial1intento2
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso contarFlores (ES contador:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contador:=contador+1
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso orientar (ES equipo:numero)
+  comenzar
+    si (PosAv = 9)
+      derecha
+      equipo:=1
+    sino
+      si (PosAv = 31)
+        repetir 3
+          derecha
+        equipo:=2
+  fin
+  proceso laterales
+  variables
+    equipo,AvActual,CaActual:numero
+  comenzar
+    orientar (equipo)
+    mover
+    repetir 9
+      juntarFlores
+      AvActual:=PosAv
+      CaActual:=PosCa
+      si (CaActual = 21)
+        BloquearEsquina(AvActual,CaActual-1)
+        Pos(AvActual,CaActual-1)
+      sino
+        BloquearEsquina(AvActual,CaActual+1)
+        Pos(AvActual,CaActual+1)
+      depositarFlores
+      Pos(AvActual,CaActual)
+      si(CaActual = 21)
+        LiberarEsquina(AvActual,CaActual-1)
+      sino
+        LiberarEsquina(AvActual,CaActual+1)
+      si (equipo = 1)
+        EnviarMensaje(1,A3)
+      sino
+        EnviarMensaje(1,V3)
+      mover
+    juntarFlores
+    AvActual:=PosAv
+    CaActual:=PosCa
+    si (CaActual = 21)
+      BloquearEsquina(AvActual,CaActual-1)
+      Pos(AvActual,CaActual-1)
+    sino
+      BloquearEsquina(AvActual,CaActual+1)
+      Pos(AvActual,CaActual+1)
+    depositarFlores
+    Pos(AvActual,CaActual)
+    si(CaActual = 21)
+      LiberarEsquina(AvActual,CaActual-1)
+    sino
+      LiberarEsquina(AvActual,CaActual+1)
+    si (equipo = 1)
+      EnviarMensaje(1,A3)
+    sino
+      EnviarMensaje(1,V3)
+  fin
+  proceso centrales
+  variables
+    equipo,continuar,AvActual,CaActual,contador:numero
+  comenzar
+    contador:=0
+    orientar (equipo)
+    repetir 5
+      repetir 2
+        RecibirMensaje(continuar,*)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      si (equipo = 1)
+        BloquearEsquina(AvActual+1,CaActual)
+      sino
+        BloquearEsquina(AvActual-1,CaActual)
+      mover
+      contarFlores (contador)
+      repetir 2
+        RecibirMensaje(continuar,*)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      si (equipo = 1)
+        BloquearEsquina(AvActual+1,CaActual)
+      sino
+        BloquearEsquina(AvActual-1,CaActual)
+      mover
+      LiberarEsquina(AvActual,CaActual)
+      contarFlores (contador)
+    AvActual:=PosAv
+    CaActual:=PosCa
+    BloquearEsquina(20,20)
+    mover
+    depositarFlores
+    EnviarMensaje(equipo,fiscalizador)
+    EnviarMensaje(contador,fiscalizador)
+    Pos(AvActual,CaActual)
+    LiberarEsquina(20,20)
+  fin
+  proceso arbitraje
+  variables
+    recorrido,equipo,flores,maxFlores,juntoMasFlores,llegoPrimero:numero
+  comenzar
+    juntoMasFlores:=0
+    maxFlores:=-1
+    recorrido:=1
+    repetir 2
+      RecibirMensaje(equipo,*)
+      si (recorrido = 1)
+        llegoPrimero:=equipo
+      si (equipo = 1)
+        RecibirMensaje(flores,A3)
+        si (flores > maxFlores)
+          maxFlores:=flores
+          juntoMasFlores:=1
+      sino
+        RecibirMensaje(flores,V3)
+        si (flores > maxFlores)
+          maxFlores:=flores
+          juntoMasFlores:=2
+      recorrido:=recorrido+1
+    Informar('LLEGOPRIMERO',llegoPrimero)
+    Informar('JUNTOMASFLORES',juntoMasFlores)
+  fin
+areas
+  area1:AreaPC(9,19,19,21)
+  area2:AreaPC(21,19,31,21)
+  deposito:AreaPC(20,20,20,20)
+  VAR:AreaP(20,18,20,18)
+robots
+  robot tipo1
+  comenzar
+    laterales
+  fin
+  robot tipo2
+  comenzar
+    centrales
+  fin
+  robot tipo3
+  comenzar
+    arbitraje
+  fin
+variables
+  A1:tipo1
+  A2:tipo1
+  A3:tipo2
+  V1:tipo1
+  V2:tipo1
+  V3:tipo2
+  fiscalizador:tipo3
+comenzar
+  AsignarArea(A1,area1)
+  AsignarArea(A2,area1)
+  AsignarArea(A3,area1)
+  AsignarArea(A3,deposito)
+  AsignarArea(V1,area2)
+  AsignarArea(V2,area2)
+  AsignarArea(V3,area2)
+  AsignarArea(V3,deposito)
+  AsignarArea(fiscalizador,VAR)
+  Iniciar(A1,9,19)
+  Iniciar(A2,9,21)
+  Iniciar(A3,9,20)
+  Iniciar(V1,31,19)
+  Iniciar(V2,31,21)
+  Iniciar(V3,31,20)
+  Iniciar(fiscalizador,20,18)
+fin
+   

@@ -1,0 +1,47 @@
+/////////////////////////  ORDENACION-SELECCION /////////////////////////
+
+Program ordenar;
+Const  maxlen =... {máxima longitud del arreglo}
+
+Type     
+      TipoElem = ... { tipo de datos del vector }
+      Indice  =  0.. maxlen;
+      Tvector =  Array  [ 1..maxlen] of TipoElem;
+
+
+Procedure Ordenar ( var v: tVector; dimLog: indice );
+
+var i, j, p: indice; item : tipoElem;	
+		
+begin
+ for i:=1 to dimLog-1 do begin {busca el mínimo y guarda en p la posición}
+          p := i;
+          for j := i+1 to dimLog do
+             if v[ j ] < v[ p ] then p:=j;
+
+         {intercambia v[i] y v[p]}
+         item := v[ p ];   
+         v[ p ] := v[ i ];   
+         v[ i ] := item;
+      end;
+end;
+
+
+/////////////////////////  ORDENACION-INSERCION /////////////////////////
+
+
+Procedure Ordenar ( var v: tVector; dimLog: indice );
+
+var i, j, p: indice; item : tipoElem;	
+		
+begin
+ for i:=2 to dimLog do begin actual:= v[i];
+     j:= i-1; 
+     while (j > 0) y (v[j] > actual) do
+      begin
+        v[j+1]:= v[j];
+        j:= j – 1;
+      end;  
+     v[j+1]:= actual; 
+end;
+

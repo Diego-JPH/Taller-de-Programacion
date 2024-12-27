@@ -1,0 +1,77 @@
+programa ej5prac5
+procesos
+  proceso cliente
+  variables
+    identidad,papeles,AvActual,CaActual:numero
+  comenzar
+    RecibirMensaje(identidad,servidor)
+    repetir 4
+      EnviarMensaje(identidad,servidor)
+      RecibirMensaje(papeles,servidor)
+      AvActual:=PosAv
+      CaActual:=PosCa
+      repetir papeles
+        BloquearEsquina(100,1)
+        Pos(100,1)
+        tomarPapel
+        Pos(AvActual,CaActual)
+        LiberarEsquina(100,1)
+        depositarPapel
+  fin
+  proceso servidor
+  variables
+    identidad,papeles:numero
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+    EnviarMensaje(1,cliente1)
+    EnviarMensaje(2,cliente2)
+    EnviarMensaje(3,cliente3)
+    repetir 12
+      RecibirMensaje(identidad,*)
+      Random(papeles,1,5)
+      BloquearEsquina(100,1)
+      Pos(100,1)
+      repetir papeles
+        depositarPapel
+      Pos(13,1)
+      LiberarEsquina(100,1)
+      si (identidad = 1)
+        EnviarMensaje(papeles,cliente1)
+      sino
+        si (identidad = 2)
+          EnviarMensaje(papeles,cliente2)
+        sino
+          EnviarMensaje(papeles,cliente3)
+  fin
+areas
+  inicio:AreaC(10,1,13,1)
+  deposito:AreaPC(100,1,100,1)
+robots
+  robot tipo1
+  comenzar
+    cliente
+  fin
+  robot tipo2
+  comenzar
+    servidor
+  fin
+variables
+  cliente1:tipo1
+  cliente2:tipo1
+  cliente3:tipo1
+  servidor:tipo2
+comenzar
+  AsignarArea(cliente1,inicio)
+  AsignarArea(cliente2,inicio)
+  AsignarArea(cliente3,inicio)
+  AsignarArea(servidor,inicio)
+  AsignarArea(cliente1,deposito)
+  AsignarArea(cliente2,deposito)
+  AsignarArea(cliente3,deposito)
+  AsignarArea(servidor,deposito)
+  Iniciar(cliente1,10,1)
+  Iniciar(cliente2,11,1)
+  Iniciar(cliente3,12,1)
+  Iniciar(servidor,13,1)
+fin

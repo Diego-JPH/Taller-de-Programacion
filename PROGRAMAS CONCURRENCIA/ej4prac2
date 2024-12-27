@@ -1,0 +1,45 @@
+programa ej4prac2
+  procesos
+    proceso control_acceso
+    variables
+      objetos:numero
+      contador1:numero
+      contador2:numero
+      contador3:numero
+      contador4:numero
+    comenzar
+      contador1:=0
+      contador2:=0
+      contador3:=0
+      contador4:=0
+      EnviarMensaje(1,robot1)
+      EnviarMensaje(2,robot2)
+      EnviarMensaje(3,robot3)
+      EnviarMensaje(4,robot4)
+      repetir 10
+        Random(acceso,1,4)
+        si (acceso = 1)
+          EnviarMensaje(1,robot1)
+          RecibirMensaje(objetos,robot1)
+          contador1:=contador1+objetos
+        sino
+          si (acceso = 2)
+            EnviarMensaje(1,robot2)
+            RecibirMensaje(objetos,robot2)
+            contador2:=contador2+objetos
+          sino
+            si (acceso = 3)
+              EnviarMensaje(1,robot3)
+              RecibirMensaje(objetos,robot3)
+              contador3:=contador3+objetos
+            sino
+              EnviarMensaje(1,robot4)
+              RecibirMensaje(objetos,robot4)
+              contador4:=contador4+objetos
+      si (contador1 > contador2)
+        si(contador1 > contador3)
+          si (contador1 > contador4)
+            Enviar
+      
+    fin
+    

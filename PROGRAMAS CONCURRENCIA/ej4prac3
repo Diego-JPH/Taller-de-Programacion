@@ -1,0 +1,81 @@
+programa ej4prac3
+procesos
+  proceso moverF
+  variables
+    AvActual,CaActual,continuar,identidad:numero
+  comenzar
+    continuar:=1
+    AvActual:=PosAv
+    CaActual:=PosCa
+    RecibirMensaje(identidad,coordinador)
+    mientras (continuar = 1)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      si (HayFlorEnLaEsquina)
+        tomarFlor
+        BloquearEsquina(11,11)
+        Pos(11,11)
+        LiberarEsquina(10,10)
+        depositarFlor
+        Pos(AvActual,CaActual)
+        LiberarEsquina(11,11)
+      sino
+        EnviarMensaje(identidad,coordinador)
+        Pos(AvActual,CaActual)
+        LiberarEsquina(10,10)
+        continuar:=0
+  fin
+  proceso arbitraje
+  variables
+    ultimo,AvActual,CaActual:numero
+  comenzar
+    AvActual:=PosAv
+    CaActual:=PosCa
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    EnviarMensaje(4,R4)
+    repetir 4
+      RecibirMensaje(ultimo,*)
+    Informar('ULTIMO',ultimo)
+    Pos(11,11)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    Pos(AvActual,CaActual)
+  fin
+areas
+  area1:AreaC(9,9,9,12)
+  area2:AreaP(1,1,1,1)
+  area3:AreaPC(10,10,11,11)
+robots
+  robot tipo1
+  comenzar
+    moverF
+  fin
+  robot tipo2
+  comenzar
+    arbitraje
+  fin
+variables
+  R1:tipo1
+  R2:tipo1
+  R3:tipo1
+  R4:tipo1
+  coordinador:tipo2
+comenzar
+  AsignarArea(R1,area1)
+  AsignarArea(R2,area1)
+  AsignarArea(R3,area1)
+  AsignarArea(R4,area1)
+  AsignarArea(R1,area3)
+  AsignarArea(R2,area3)
+  AsignarArea(R3,area3)
+  AsignarArea(R4,area3)
+  AsignarArea(coordinador,area3)
+  AsignarArea(coordinador,area2)
+  Iniciar(R1,9,9)
+  Iniciar(R2,9,10)
+  Iniciar(R3,9,11)
+  Iniciar(R4,9,12)
+  Iniciar(coordinador,1,1)
+fin
